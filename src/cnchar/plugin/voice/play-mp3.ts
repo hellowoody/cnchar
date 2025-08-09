@@ -73,21 +73,36 @@ const loadAudio = ((() => {
     if (Env === 'web') {
         return (url: string) => {
             return new Promise((resolve) => {
-                const xhr = new window.XMLHttpRequest();
-                xhr.open('GET', url, true);
-                xhr.responseType = 'arraybuffer';
-                xhr.onreadystatechange = () => {
-                    if (xhr.status === 200) {
-                        if (xhr.readyState === 4) {
-                            decodeArrayBuffer(xhr.response, resolve);
-                        }
-                    } else {
-                        resolve(null);
-                    }
-                };
-                xhr.onerror = () => {resolve(null);};
-                xhr.ontimeout = () => {resolve(null);};
-                xhr.send();
+                console.log("wwwwwwwwwww play-mp3")
+                Promise.resolve().then(() => {
+                    // 找到最后一个斜杠的位置
+                    const lastSlashIndex = url.lastIndexOf('/') + 1;
+
+                    // 找到最后一个点的位置
+                    const lastDotIndex = url.lastIndexOf('.');
+
+                    // 截取中间部分
+                    const name = url.substring(lastSlashIndex, lastDotIndex); 
+                    const data = voiceData[name].data
+
+                    const arrBuf = base64ToArrayBuffer(data)
+                    decodeArrayBuffer(arrBuf, resolve);
+                })
+                // const xhr = new window.XMLHttpRequest();
+                // xhr.open('GET', url, true);
+                // xhr.responseType = 'arraybuffer';
+                // xhr.onreadystatechange = () => {
+                //     if (xhr.status === 200) {
+                //         if (xhr.readyState === 4) {
+                //             decodeArrayBuffer(xhr.response, resolve);
+                //         }
+                //     } else {
+                //         resolve(null);
+                //     }
+                // };
+                // xhr.onerror = () => {resolve(null);};
+                // xhr.ontimeout = () => {resolve(null);};
+                // xhr.send();
             });
         };
     }
@@ -142,4 +157,23 @@ export function playMp3Buffer ({
             });
         }
     });
+}
+
+function arrayBufferToBase64(buffer:ArrayBuffer) {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    for (let i = 0; i < bytes.byteLength; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary); // 使用 btoa 编码为 Base64
+}
+
+function base64ToArrayBuffer(base64:string) {
+    const binaryString = atob(base64); // 使用 atob 解码 Base64
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes.buffer;
 }

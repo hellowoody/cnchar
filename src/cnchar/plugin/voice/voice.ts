@@ -212,9 +212,13 @@ function getVoiceAudios (word: string) {
     if (TempDict[word]) {
         return [TempDict[word]];
     } else {
+        console.log("wwwwwwwwwwwwwwwww  voice")
         return (_cnchar.spell(word, 'tone', 'flat', 'array', 'low') as string[]).map(spell => {
-            return `${getResourceBase()}${spell}.mp3`;
+            return `${getResourceBase()}${spell.charAt(spell.length - 1) === "0" ? spell.replace("0","1") : spell}.mp3`;
         });
+        // return (_cnchar.spell(word, 'tone', 'flat', 'array', 'low') as string[]).map(spell => {
+        //     return `${getResourceBase()}${spell}.mp3`;
+        // });
     }
 }
 

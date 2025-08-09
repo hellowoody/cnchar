@@ -1,3 +1,81 @@
+# 安装
+
+ ```shell
+ npm i --force
+
+ npm i --force --registry=https://registry.npmmirror.com
+ ```
+# 在cnchar-data项目中要生成前置数据文件
+
+ - draw_data.min.json
+ - voice_data.json
+
+# 修改的文件
+
+ - src\cnchar\plugin\draw\hanzi-writer.js
+    ```js
+    console.log("wwwwwwwwwwww hanzi-writer")
+    Promise.resolve().then(() => i(drawData[t]))
+    ```
+ - src\cnchar\plugin\voice\play-mp3.ts
+    ```js
+    console.log("wwwwwwwwwww play-mp3")
+    Promise.resolve().then(() => {
+        // 找到最后一个斜杠的位置
+        const lastSlashIndex = url.lastIndexOf('/') + 1;
+
+        // 找到最后一个点的位置
+        const lastDotIndex = url.lastIndexOf('.');
+
+        // 截取中间部分
+        const name = url.substring(lastSlashIndex, lastDotIndex); 
+        const data = voiceData[name].data
+
+        const arrBuf = base64ToArrayBuffer(data)
+        decodeArrayBuffer(arrBuf, resolve);
+    })
+
+    function arrayBufferToBase64(buffer:ArrayBuffer) {
+        let binary = '';
+        const bytes = new Uint8Array(buffer);
+        for (let i = 0; i < bytes.byteLength; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return btoa(binary); // 使用 btoa 编码为 Base64
+    }
+
+    function base64ToArrayBuffer(base64:string) {
+        const binaryString = atob(base64); // 使用 atob 解码 Base64
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+        return bytes.buffer;
+    }
+    ```
+ - src\cnchar\plugin\voice\voice.ts
+    ```js
+    console.log("wwwwwwwwwwwwwwwww  voice")
+    return (_cnchar.spell(word, 'tone', 'flat', 'array', 'low') as string[]).map(spell => {
+        return `${getResourceBase()}${spell.charAt(spell.length - 1) === "0" ? spell.replace("0","1") : spell}.mp3`;
+    });
+    ```
+
+# 项目中如果访问笔画和读音等，需要访问外部文件
+
+ 配置访问外部文件的文件是src\cnchar\common\build-resource.ts
+
+ ```js
+ // export const BASE_DIR = './char-data/';
+ export const BASE_DIR = 'https://unpkg.com/cnchar-data@latest/';
+ ```
+
+
+***
+
+# 原始文档
+
 <p align="center">
     <img src='https://fastly.jsdelivr.net/gh/theajack/cnchar/dist/rm-logo.png' width='200px'/>
 </p> 

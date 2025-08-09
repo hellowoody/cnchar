@@ -2512,26 +2512,29 @@ export default (function (n) {
         'use strict';
         (function (o) {
             t.exports = function (t, i, n) {
-                var r = new o.XMLHttpRequest();
-                r.overrideMimeType &&
-                    r.overrideMimeType('application/json'),
-                    r.open(
-                        'GET',
-                        getResourceBase() +
-                            t +
-                            '.json',
-                        !0
-                    ),
-                    (r.onerror = function (t) {
-                        n(r, t);
-                    }),
-                    (r.onreadystatechange = function () {
-                        4 === r.readyState &&
-                            (200 === r.status
-                                ? i(JSON.parse(r.responseText))
-                                : 0 !== r.status && n && n(r));
-                    }),
-                    r.send(null);
+                console.log("wwwwwwwwwwww hanzi-writer")
+                Promise.resolve().then(() => i(drawData[t]))
+                
+                // var r = new o.XMLHttpRequest();
+                // r.overrideMimeType &&
+                //     r.overrideMimeType('application/json'),
+                //     r.open(
+                //         'GET',
+                //         getResourceBase() +
+                //             t +
+                //             '.json',
+                //         !0
+                //     ),
+                //     (r.onerror = function (t) {
+                //         n(r, t);
+                //     }),
+                //     (r.onreadystatechange = function () {
+                //         4 === r.readyState &&
+                //             (200 === r.status
+                //                 ? i(JSON.parse(r.responseText))
+                //                 : 0 !== r.status && n && n(r));
+                //     }),
+                //     r.send(null);
             };
         }.call(i, n(1)));
     },

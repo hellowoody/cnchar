@@ -11,7 +11,10 @@ module.exports = {
     ts: {
         test: /(.ts)$/,
         use: {
-            loader: 'ts-loader'
+            loader: 'ts-loader',
+            options: {
+                transpileOnly: true
+            }
         }
     },
     js: {
